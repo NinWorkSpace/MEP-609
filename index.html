@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEP 6/9 Classroom Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <button class="mobile-toggle" id="mobileToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <img src="images/logo.png" alt="MEP 6/9 Logo" class="brand-logo">
+                <span>MEP 6/9</span>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-link active" data-target="dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+                <a href="#" class="menu-link" data-target="homework"><i class="fas fa-book"></i> การบ้าน</a>
+                <a href="#" class="menu-link" data-target="announcement"><i class="fas fa-bullhorn"></i> ประกาศ/กิจกรรม</a>
+                <a href="#" class="menu-link" data-target="schedule"><i class="fas fa-calendar-alt"></i> ตารางเรียน</a>
+                <a href="#" class="menu-link" data-target="exam"><i class="fas fa-file-alt"></i> ตารางสอบ</a>
+                <a href="#" class="menu-link" data-target="finance"><i class="fas fa-wallet"></i> การเงินห้อง</a>
+                <a href="#" class="menu-link" data-target="gallery"><i class="fas fa-images"></i> คลังรูปกิจกรรม</a>
+                <a href="#" class="menu-link" data-target="members"><i class="fas fa-users"></i> สมาชิกห้อง</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fas fa-magic"></i> <span>ธีมตามเวลา</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="top-bar">
+                <div class="page-title">
+                    <h2 id="current-page-title">Dashboard</h2>
+                    <p id="current-page-desc">ยินดีต้อนรับสู่ระบบจัดการห้องเรียน MEP 6/9</p>
+                </div>
+                <div class="user-profile" id="userProfileArea">
+                    <span class="user-status">⚡ Guest</span>
+                    <button class="login-btn" id="openLoginBtn"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
+                </div>
+            </header>
+
+            <div id="page-dashboard" class="page-section active">
+                <div class="dashboard-grid">
+                    <section class="card glass-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bullhorn" style="color: #ff9800;"></i> ประกาศและกิจกรรมล่าสุด</h3>
+                        </div>
+                        <div class="card-body" id="dashboard-announcements">
+                            </div>
+                    </section>
+
+                    <section class="card glass-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-tasks" style="color: #ef5350;"></i> การบ้านค้างส่ง</h3>
+                        </div>
+                        <div class="card-body" id="dashboard-homeworks">
+                            </div>
+                    </section>
+
+                    <section class="card glass-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar-day" style="color: var(--accent-color);"></i> ตารางเรียนวันนี้</h3>
+                        </div>
+                        <div class="card-body">
+                            <img src="images/schedule.jpg" alt="ตารางเรียน MEP 6/9" class="schedule-img">
+                        </div>
+                    </section>
+
+                    <section class="card glass-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-wallet" style="color: var(--accent-color);"></i> การเงินห้อง</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="balance-box">
+                                <span class="balance-label">ยอดเงินคงเหลือในบัญชีห้อง</span>
+                                <h2 class="balance-amount" id="dashboard-balance">0.00 ฿</h2>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="page-homework" class="page-section">
+                <div class="card glass-card admin-only" style="margin-bottom: 20px;">
+                    <h3>➕ เพิ่มงาน/การบ้านใหม่</h3>
+                    <form id="add-homework-form" style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <input type="text" id="hw-subject" placeholder="วิชา เช่น ฟิสิกส์" required style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                        <input type="text" id="hw-detail" placeholder="รายละเอียดงาน" required style="flex: 2; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                        <input type="date" id="hw-date" required style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                        <button type="submit" class="login-btn" style="background-color: var(--accent-color);">เพิ่มการบ้าน</button>
+                    </form>
+                </div>
+
+                <div class="card glass-card">
+                    <div class="card-header"><h3>📌 รายการการบ้านที่ต้องส่ง</h3></div>
+                    <div class="homework-list" id="homework-list-container">
+                        </div>
+                </div>
+            </div>
+
+            <div id="page-announcement" class="page-section">
+                <div class="card glass-card admin-only" style="margin-bottom: 20px;">
+                    <h3>➕ เพิ่มประกาศหรือแจ้งกิจกรรมใหม่</h3>
+                    <form id="add-announcement-form" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                        <textarea id="ann-content" placeholder="พิมพ์ข้อความประกาศแจ้งกิจกรรมที่นี่..." required style="padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); min-height: 80px; resize: vertical;"></textarea>
+                        <button type="submit" class="login-btn" style="align-self: flex-end; background-color: var(--accent-color);">โพสต์ประกาศ</button>
+                    </form>
+                </div>
+
+                <div class="announcement-container" id="announcement-list-container">
+                    </div>
+            </div>
+
+            <div id="page-schedule" class="page-section">
+                <div class="card glass-card">
+                    <div class="card-header"><h3>📅 ตารางเรียนประจำภาคเรียน</h3></div>
+                    <div class="card-body text-center">
+                        <img src="images/schedule.jpg" alt="ตารางเรียน MEP 6/9" class="full-schedule-img">
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-exam" class="page-section">
+    <div class="card glass-card admin-only" style="margin-bottom: 20px;">
+        <h3>➕ เพิ่ม / แก้ไขรายการตารางสอบและรูปกิจกรรม</h3>
+        <form id="add-exam-form" style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+            <input type="date" id="exam-date" required style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+            <input type="text" id="exam-time" placeholder="เวลา เช่น 08:30 - 10:00" required style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); width: 150px;">
+            <input type="text" id="exam-subject" placeholder="ชื่อวิชา" required style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+            <input type="text" id="exam-room" placeholder="ห้องสอบ เช่น ห้อง 421" required style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); width: 130px;">
+            <input type="url" id="exam-img" placeholder="ลิงก์รูปภาพกิจกรรม (ถ้ามี)" style="flex: 1; min-width: 200px; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+            <button type="submit" class="login-btn" style="background-color: var(--accent-color);">บันทึกข้อมูล</button>
+        </form>
+    </div>
+
+    <div class="card glass-card">
+        <div class="card-header"><h3>📝 ตารางสอบและกิจกรรมวัดผลที่กำลังจะมาถึง</h3></div>
+        <div class="card-body table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>วันที่สอบ</th>
+                        <th>เวลา</th>
+                        <th>วิชา</th>
+                        <th>ห้องสอบ</th>
+                        <th>รูปกิจกรรม/โครงงาน</th>
+                        <th class="admin-only">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="exam-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+            <div id="page-finance" class="page-section">
+                <div class="finance-grid">
+                    <div class="card glass-card">
+                        <div class="balance-box">
+                            <span class="balance-label">เงินกองกลางห้องคงเหลือ</span>
+                            <h2 class="balance-amount" id="finance-total-balance">0.00 ฿</h2>
+                        </div>
+                        
+                        <div class="admin-only" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;">
+                            <h4 style="margin-bottom: 10px;">💸 บันทึก รายรับ-รายจ่าย ห้อง</h4>
+                            <form id="finance-form" style="display: flex; flex-direction: column; gap: 8px;">
+                                <input type="text" id="fin-title" placeholder="รายการ เช่น ค่าชีทสรุป, ซื้อไม้กวาด" required style="padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                                <input type="number" id="fin-amount" placeholder="จำนวนเงิน (บาท)" required style="padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                                <div style="display: flex; gap: 10px;">
+                                    <button type="button" id="btn-income" style="flex: 1; padding: 8px; background: #2ec4b6; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold;">+ รายรับ</button>
+                                    <button type="button" id="btn-expense" style="flex: 1; padding: 8px; background: #ef5350; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold;">- รายจ่าย</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-header"><h3>📊 ประวัติการฝาก-จ่ายเงินห้อง</h3></div>
+                        <div class="card-body table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>รายการ</th>
+                                        <th>ประเภท</th>
+                                        <th>จำนวนเงิน</th>
+                                        <th>การจัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="finance-table-body">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-gallery" class="page-section">
+                <div class="card glass-card admin-only" style="margin-bottom: 20px;">
+                    <h3>➕ เพิ่มรูปภาพกิจกรรม</h3>
+                    <form id="add-gallery-form" style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <input type="text" id="gal-title" placeholder="ชื่อกิจกรรม เช่น วันไหว้ครู" required style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                        <input type="url" id="gal-url" placeholder="วางลิงก์รูปภาพ (URL)" required style="flex: 2; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);">
+                        <button type="submit" class="login-btn" style="background-color: var(--accent-color);">เพิ่มลงคลัง</button>
+                    </form>
+                </div>
+
+                <div class="gallery-grid" id="gallery-container">
+                    </div>
+            </div>
+
+            <div id="page-members" class="page-section">
+                <div class="members-grid">
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 1 (14799)</h4>
+                        <p>นายนิลพัทธ์ เวียงนนท์</p>
+                        <span class="role-badge" style="background: #312e81; color: #e0e7ff; border: 1px solid #4338ca;">Developer</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 2 (14806)</h4>
+                        <p>นายปุญชรัศม์ ผลทรัพย์เจริญ</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 3 (14880)</h4>
+                        <p>เด็กชายอติชาต นวลสุวรรณ</p>
+                        <span class="role-badge" style="background: #7f1d1d; color: #fef2f2; border: 1px solid #b91c1c;">Class Leader</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 4 (16535)</h4>
+                        <p>นายโยชูวา มิ่งมาศ</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 5 (14901)</h4>
+                        <p>นางสาวกนกณัฐ ปัญญาทิพย์</p>
+                        <span class="role-badge" style="background: #064e3b; color: #ecfdf5; border: 1px solid #059669;">Co-leader</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 6 (14910)</h4>
+                        <p>นางสาวกัญญาภัทร บุญดาษา</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 7 (14933)</h4>
+                        <p>นางสาวชญานิน เขียวเขิน</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 8 (14954)</h4>
+                        <p>นางสาวณิชาภัทร ชมภูแสง</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 9 (14956)</h4>
+                        <p>นางสาวณิชาภัทร อะปะมาตร์</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 10 (15062)</h4>
+                        <p>นางสาวสีตรา ศรีสวัสดิ์</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 11 (15073)</h4>
+                        <p>นางสาวอภิสรา รมยสมิทธิ</p>
+                        <span class="role-badge">member</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 12 (16574)</h4>
+                        <p>นางสาวแพรวแพรวา อาจวิชัย</p>
+                        <span class="role-badge" style="background: #78350f; color: #fefbeb; border: 1px solid #d97706;">Accountant</span>
+                    </div>
+
+                    <div class="member-card">
+                        <div class="member-avatar"><i class="fas fa-user-circle"></i></div>
+                        <h4>เลขที่ 13 (16592)</h4>
+                        <p>นางสาวธรัญย์ธร ศรีวิชา</p>
+                        <span class="role-badge">member</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> เข้าสู่ระบบ MEP 6/9</h3>
+                <button class="close-modal-btn" id="closeLoginBtn">&times;</button>
+            </div>
+            <form id="loginForm" class="modal-form">
+                <div class="input-group">
+                    <label for="username"><i class="fas fa-user"></i> ชื่อผู้ใช้งาน หรือ เลขที่</label>
+                    <input type="text" id="username" placeholder="กรอกเลขที่ หรือชื่อผู้ใช้" required>
+                </div>
+                <div class="input-group">
+                    <label for="password"><i class="fas fa-key"></i> รหัสผ่าน</label>
+                    <input type="password" id="password" placeholder="กรอกรหัสผ่าน" required>
+                </div>
+                <p class="login-tip">* บัญชีทดสอบสำหรับ Portfolio: ใส่ชื่อและรหัสอะไรก็ได้</p>
+                <button type="submit" class="submit-login-btn">ล็อกอิน</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,585 @@
+/* กำหนดค่าตัวแปรธีมเขียวมิ้นต์ (Light Mode) */
+:root {
+    --bg-primary: #f0f7f4;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --text-main: #1e2d24;
+    --text-muted: #5c7264;
+    --accent-color: #2ec4b6;       /* เขียวมิ้นต์หลัก */
+    --accent-hover: #25a195;
+    --border-color: #d8e8e1;
+    --shadow: rgba(46, 196, 182, 0.08) 0px 8px 24px;
+    --transition: all 0.25s ease;
+}
+
+/* กำหนดค่าตัวแปรธีมเขียวมิ้นต์ดาร์กโหมด (Dark Mode) */
+[data-theme="dark"] {
+    --bg-primary: #121c17;         /* พื้นหลังมืดโทนเขียวเข้มสุดคลีน */
+    --bg-sidebar: #192720;
+    --bg-card: #1f3128;
+    --text-main: #f0f7f4;
+    --text-muted: #8fa89b;
+    --accent-color: #2ec4b6;       /* นีออนมิ้นต์สำหรับดาร์กโหมด */
+    --accent-hover: #3ee0d0;
+    --border-color: #2d4539;
+    --shadow: rgba(0, 0, 0, 0.3) 0px 8px 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    transition: var(--transition);
+    overflow-x: hidden;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+    transition: var(--transition);
+}
+
+.sidebar-brand {
+    padding: 24px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-brand .brand-logo {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.sidebar-menu {
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.sidebar-menu a:hover, .sidebar-menu a.active {
+    background-color: var(--accent-color);
+    color: #121c17; /* ดาร์กโทนเพื่อให้ตัดกับสีมิ้นต์ */
+}
+
+/* เมื่อสลับเข้าสู่ Dark Mode ให้ตัวหนังสือในเมนูที่เลือกเป็นสีสว่าง */
+[data-theme="dark"] .sidebar-menu a.active, [data-theme="dark"] .sidebar-menu a:hover {
+    color: #ffffff;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.theme-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+/* MAIN CONTENT */
+.main-content {
+    flex-grow: 1;
+    margin-left: 260px;
+    padding: 40px;
+    transition: var(--transition);
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-title h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.page-title p {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-status {
+    background: var(--border-color);
+    color: var(--text-main);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.user-status.online {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.login-btn, .logout-btn {
+    background-color: var(--accent-color);
+    color: #121c17;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+[data-theme="dark"] .login-btn {
+    color: #ffffff;
+}
+
+.logout-btn {
+    background-color: #ef5350;
+    color: white;
+}
+
+.login-btn:hover, .logout-btn:hover {
+    opacity: 0.9;
+}
+
+/* PAGE DISPLAY */
+.page-section {
+    display: none;
+}
+
+.page-section.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* CARDS & GRIDS */
+.dashboard-grid, .finance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.card-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 40px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.schedule-img, .full-schedule-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+/* FINANCE BOX (Gradient มิ้นต์พรีเมียม) */
+.balance-box {
+    background: linear-gradient(135deg, #2ec4b6, #1f8a80);
+    color: white;
+    padding: 24px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.balance-amount {
+    font-size: 32px;
+    margin-top: 8px;
+}
+
+/* HOMEWORK PAGE */
+.homework-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.homework-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: var(--bg-primary);
+    border-left: 5px solid var(--accent-color);
+    border-radius: 8px;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: white;
+    font-weight: bold;
+}
+
+.badge-red { background: #ef5350; }
+.badge-mint { background: var(--accent-color); color: #121c17; }
+[data-theme="dark"] .badge-mint { color: white; }
+
+/* TABLES (EXAM & FINANCE) */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.custom-table th, .custom-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.custom-table th {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+}
+
+.income { color: #2ec4b6; font-weight: bold; }
+.expense { color: #ef5350; font-weight: bold; }
+
+/* ANNOUNCEMENT */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--accent-color);
+}
+
+.post-time {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* GALLERY */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.placeholder-img {
+    height: 180px;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--text-muted);
+}
+
+.gallery-info { padding: 14px; }
+
+/* MEMBERS */
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.member-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.member-avatar {
+    font-size: 50px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.role-badge.leader {
+    background: #fff8e1;
+    color: #f57f17;
+    font-weight: bold;
+}
+
+/* 🔐 LOGIN MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transform: translateY(-20px);
+    transition: var(--transition);
+}
+
+.modal-overlay.open .modal-box {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.modal-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.input-group input {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: var(--transition);
+}
+
+.input-group input:focus {
+    border-color: var(--accent-color);
+}
+
+.login-tip {
+    font-size: 12px;
+    color: var(--accent-color);
+}
+
+.submit-login-btn {
+    background-color: var(--accent-color);
+    color: #121c17;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 8px;
+}
+
+[data-theme="dark"] .submit-login-btn {
+    color: #ffffff;
+}
+
+.submit-login-btn:hover {
+    opacity: 0.9;
+}
+
+/* RESPONSIVE */
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .sidebar { left: -260px; }
+    .sidebar.active { left: 0; }
+    .main-content { margin-left: 0; padding: 20px; }
+    .dashboard-grid, .finance-grid { grid-template-columns: 1fr; }
+    .top-bar { flex-direction: column; align-items: flex-start; gap: 16px; margin-top: 20px; }
+    .mobile-toggle { display: flex; align-items: center; justify-content: center; }
+}
+/* ก๊อปปี้โค้ดสไตล์ทั้งหมดจากข้อความก่อนหน้ามาวาง แล้วเพิ่มส่วนนี้ไว้ท้ายไฟล์ครับ */
+
+/* ปุ่มลบข้อมูลหลังบ้าน */
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ef5350;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+.delete-btn:hover {
+    background: rgba(239, 83, 80, 0.1);
+}
+
+/* ซ่อนเมนูระบบหลังบ้านสำหรับผู้ใช้ทั่วไป จะโชว์เมื่อล็อกอินเท่านั้น */
+.admin-only {
+    display: none !important;
+}
+
+body.admin-mode .admin-only {
+    display: block !important;
+}
+body.admin-mode form.admin-only {
+    display: flex !important;
+}
+body.admin-mode div.admin-only {
+    display: block !important;
+}
