@@ -448,3 +448,26 @@ loginForm?.addEventListener('submit', (e) => {
 });
 
 checkUserSession();
+// 1. อ้างอิงไปยังช่องกรอกข้อมูลของคุณ (เปลี่ยน 'myInput' ให้ตรงกับ id ใน html ของคุณ)
+const inputField = document.getElementById('myInput');
+
+// 2. [ดึงข้อมูลกลับมาแสดงเมื่อรีเฟรชหน้าจอ]
+window.onload = function() {
+    const savedData = localStorage.getItem('backupText');
+    if (savedData) {
+        inputField.value = savedData; // ถ้าเคยบันทึกไว้ ให้นำกลับมาแสดงในช่องกรอก
+    }
+};
+
+// 3. ฟังก์ชันสำหรับ "กดบันทึกข้อมูล" (เอาไปผูกกับปุ่มบันทึกของคุณ เช่น <button onclick="saveData()">บันทึก</button>)
+function saveData() {
+    localStorage.setItem('backupText', inputField.value); // เซฟข้อมูลลงเบราว์เซอร์
+    alert('บันทึกข้อมูลสำเร็จ!');
+}
+
+// 4. ฟังก์ชันสำหรับล้างข้อมูล (ถ้าต้องการใช้)
+function clearData() {
+    localStorage.removeItem('backupText'); // ลบข้อมูลที่บันทึกไว้ในเบราว์เซอร์
+    inputField.value = ''; // ล้างช่องกรอกข้อมูลให้ว่างเปล่า
+    alert('ล้างข้อมูลเรียบร้อยแล้ว!');
+}
