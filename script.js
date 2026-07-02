@@ -97,7 +97,7 @@ let database = {
     announcements: JSON.parse(localStorage.getItem('db_announcements')) || [],
     finance: JSON.parse(localStorage.getItem('db_finance')) || [],
     gallery: JSON.parse(localStorage.getItem('db_gallery')) || [],
-    exams: JSON.parse(localStorage.getItem('db_exams')) || []
+    exams: JSON.parse(localStorage.getItem('db_exams')) || [] // เพิ่มหน่วยความจำรองรับตารางสอบหลังบ้าน
 };
 
 function syncBackend() {
@@ -105,20 +105,9 @@ function syncBackend() {
     localStorage.setItem('db_announcements', JSON.stringify(database.announcements));
     localStorage.setItem('db_finance', JSON.stringify(database.finance));
     localStorage.setItem('db_gallery', JSON.stringify(database.gallery));
-    localStorage.setItem('db_exams', JSON.stringify(database.exams));
+    localStorage.setItem('db_exams', JSON.stringify(database.exams)); // บันทึกข้อมูลตารางสอบลง LocalStorage
     renderAll();
 }
-
-// ฟังก์ชันสำหรับดาวน์โหลดรูปภาพโดยตรงไปยังเครื่องคอมพิวเตอร์/มือถือ
-window.downloadImage = function(url, filename) {
-    if(!url) return;
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename || 'mep69-image';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-};
 
 // --- ฟังก์ชันดึงและเรนเดอร์ข้อมูลขึ้น UI หน้าเว็บ ---
 function renderAll() {
@@ -211,11 +200,11 @@ function renderAll() {
         if (isFinanceAdmin) {
             financeAdminBlock.style.setProperty('display', 'block', 'important');
         } else {
-            financeAdminBlock.style.setProperty('none', 'important');
+            financeAdminBlock.style.setProperty('display', 'none', 'important');
         }
     }
 
-    // 4.4 คลังรูปภาพกิจกรรม (เพิ่มปุ่มกดดาวน์โหลดรูปภาพแยกต่างหาก)
+    // 4.4 คลังรูปภาพกิจกรรม
     const galleryContainer = document.getElementById('gallery-container');
     if (galleryContainer) {
         if (database.gallery.length === 0) {
@@ -225,19 +214,12 @@ function renderAll() {
             database.gallery.forEach((item, index) => {
                 galHtml += `
                     <div class="gallery-item">
-                        <div class="gallery-img-wrapper" style="cursor: pointer;" onclick="viewImage('${item.url}', '${item.title}')">
-                            <img src="${item.url}" alt="${item.title}" style="width:100%; height:180px; object-fit:cover; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                        <div class="gallery-img-wrapper">
+                            <img src="${item.url}" alt="${item.title}" style="width:100%; height:180px; object-fit:cover;">
                         </div>
-                        <div class="gallery-info" style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; gap:8px;">
-                            <h4 style="flex-grow:1; margin:0; cursor: pointer; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" onclick="viewImage('${item.url}', '${item.title}')">${item.title}</h4>
-                            <div style="display:flex; gap:6px; flex-shrink:0;">
-                                <button class="action-btn" title="ดาวน์โหลดรูปภาพ" style="background:var(--accent-color); color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;" onclick="downloadImage('${item.url}', '${item.title}'); event.stopPropagation();">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button class="delete-btn admin-only" title="ลบรูปภาพ" style="margin:0;" onclick="deleteItem('gallery', ${index}); event.stopPropagation();">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
+                        <div class="gallery-info" style="display:flex; justify-content:between; align-items:center; padding:10px 0;">
+                            <h4 style="flex-grow:1;">${item.title}</h4>
+                            <button class="delete-btn admin-only" onclick="deleteItem('gallery', ${index})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>`;
             });
@@ -245,7 +227,7 @@ function renderAll() {
         }
     }
 
-    // 4.5 เรนเดอร์หน้าตารางสอบพร้อมรูปกิจกรรม
+    // 4.5 เรนเดอร์หน้าตารางสอบพร้อมรูปกิจกรรม (ย้ายเข้ามาอยู่ในฟังก์ชันเรนเดอร์หลักสัมพันธ์กับการซิงค์ข้อมูล)
     const examTable = document.getElementById('exam-table-body');
     if (examTable) {
         if (database.exams.length === 0) {
@@ -258,7 +240,7 @@ function renderAll() {
                 });
                 
                 const imgCell = item.img ? 
-                    `<img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--border-color); cursor:pointer;" title="คลิกเพื่อดูรูปใหญ่ / ดาวน์โหลด" onclick="viewImage('${item.img}', '${item.subject}')">` : 
+                    `<a href="${item.img}" target="_blank"><img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--border-color);" title="คลิกเพื่อดูรูปใหญ่"></a>` : 
                     `<span style="color:var(--text-muted); font-size:12px;">ไม่มีรูปกิจกรรม</span>`;
 
                 examHtml += `
@@ -277,52 +259,6 @@ function renderAll() {
         }
     }
 }
-
-// ฟังก์ชันเปิดดูรูปขนาดใหญ่พร้อมเพิ่มปุ่มดาวน์โหลดรูปขนาดเต็มในหน้าต่างป๊อปอัป
-window.viewImage = function(url, title) {
-    let previewModal = document.getElementById('imagePreviewModal');
-    if (!previewModal) {
-        previewModal = document.createElement('div');
-        previewModal.id = 'imagePreviewModal';
-        previewModal.style = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.25s ease; pointer-events:none;';
-        previewModal.innerHTML = `
-            <div style="position:absolute; top:20px; right:20px; color:#fff; font-size:30px; cursor:pointer; user-select:none; width:45px; height:45px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.1); border-radius:50%; z-index:10000;" onclick="closeImageViewer()">&times;</div>
-            <div style="position:relative; max-width:90%; max-height:75%; display:flex; flex-direction:column; align-items:center;">
-                <img id="previewModalImg" src="" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-                <button id="modalDownloadBtn" style="position:absolute; bottom:15px; right:15px; background:#2ec4b6; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-family:'Noto Sans Thai',sans-serif; font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.3); display:flex; align-items:center; gap:8px; transition:all 0.2s;">
-                    <i class="fas fa-download"></i> ดาวน์โหลดรูปภาพ
-                </button>
-            </div>
-            <h3 id="previewModalTitle" style="color:#fff; margin-top:20px; font-family:'Noto Sans Thai', sans-serif; font-weight:400; text-align:center; max-width:80%;"></h3>
-        `;
-        document.body.appendChild(previewModal);
-        
-        previewModal.addEventListener('click', (e) => {
-            if (e.target === previewModal) closeImageViewer();
-        });
-    }
-    
-    document.getElementById('previewModalImg').src = url;
-    document.getElementById('previewModalTitle').innerText = title;
-    
-    // ตั้งค่า Event ปุ่มดาวน์โหลดใน Modal
-    const downloadBtn = document.getElementById('modalDownloadBtn');
-    downloadBtn.onclick = function(e) {
-        e.stopPropagation();
-        downloadImage(url, title);
-    };
-    
-    previewModal.style.opacity = '1';
-    previewModal.style.pointerEvents = 'auto';
-};
-
-window.closeImageViewer = function() {
-    const previewModal = document.getElementById('imagePreviewModal');
-    if (previewModal) {
-        previewModal.style.opacity = '0';
-        previewModal.style.pointerEvents = 'none';
-    }
-};
 
 // ฟังก์ชันสั่งลบข้อมูลออกจากฐานข้อมูลหลังบ้าน
 window.deleteItem = function(category, index) {
@@ -361,6 +297,7 @@ document.getElementById('add-gallery-form')?.addEventListener('submit', (e) => {
     syncBackend();
 });
 
+// ดักจับฟอร์มบันทึกข้อมูลตารางสอบส่งไปหลังบ้าน (ใส่ ?. เผื่อในหน้า HTML ไม่พบบทบาทของฟอร์มนี้)
 document.getElementById('add-exam-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
     database.exams.push({
@@ -396,6 +333,7 @@ const closeLoginBtn = document.getElementById('closeLoginBtn');
 const loginForm = document.getElementById('loginForm');
 const userProfileArea = document.getElementById('userProfileArea');
 
+// ฐานข้อมูลผู้ใช้: ใช้รหัสประจำตัว 5 ตัวแรกเป็น Username คีย์หลัก และเชื่อมตำแหน่ง Role ตรงกับหน้า HTML
 const allowedUsers = {
     "14799": { password: "11/04/2552", no: 1, name: "นายนิลพัทธ์ เวียงนนท์", role: "Developer" },
     "14806": { password: "25/03/2552", no: 2, name: "นายปุญชรัศม์ ผลทรัพย์เจริญ", role: "member" },
@@ -415,7 +353,9 @@ const checkUserSession = () => {
     const loggedInUser = sessionStorage.getItem('username');
     if (loggedInUser && allowedUsers[loggedInUser]) {
         const user = allowedUsers[loggedInUser];
+        // เมื่อเข้าสู่ระบบ จะเปิดบอดี้เป็นโหมด admin เพื่อปลดล็อกปุ่มเพิ่ม/ลบสำหรับการบ้าน ประกาศ และคลังรูปภาพ
         document.body.classList.add('admin-mode');
+        // แสดงชื่อจริงและบทบาทที่ผูกไว้ตรงตามโครงสร้างของระบบเว็บ
         userProfileArea.innerHTML = `
             <span class="user-status online" style="background:#e8f5e9;color:#2e7d32;font-weight:600;padding:5px 10px;border-radius:20px;">⚡ ${user.role}: ${user.name}</span>
             <button class="logout-btn" id="logoutBtn" style="margin-left:10px;"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</button>
@@ -426,7 +366,7 @@ const checkUserSession = () => {
             location.reload();
         });
     }
-    renderAll();
+    renderAll(); // โหลดและประมวลผลการแสดงผลหน้า UI แยกสิทธิ์ตามผู้ใช้ที่ใช้งานจริง
 };
 
 if (openLoginBtn) { openLoginBtn.addEventListener('click', () => loginModal.classList.add('open')); }
@@ -438,50 +378,16 @@ loginForm?.addEventListener('submit', (e) => {
     const inputUser = document.getElementById('username').value.trim();
     const inputPass = document.getElementById('password').value.trim();
     
+    // ตรวจสอบข้อมูลรหัสประจำตัว 5 ตัวแรก และตรวจสอบรหัสผ่านวันเกิดรูปแบบ (วัน/เดือน/ปีพ.ศ.)
     if (allowedUsers[inputUser] && allowedUsers[inputUser].password === inputPass) {
         sessionStorage.setItem('username', inputUser);
         loginModal.classList.remove('open');
         checkUserSession();
     } else {
+        // หากกรอกไม่ตรงตามเงื่อนไข จะทำการเเจ้งเตือนเออเร่อ
         alert("ชื่อหรือรหัสผ่านไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง");
     }
 });
 
+// เริ่มต้นตรวจสอบสถานะเซสชันการเข้าสู่ระบบทันทีที่โหลดหน้าเว็บเสร็จสิ้น
 checkUserSession();
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, push, onValue } from "firebase/database";
-
-// คอนฟิกสำหรับโปรเจกต์ mep-609 ของคุณ
-const firebaseConfig = {
-  apiKey: "AIzaSyCkMwiODGtDJD1NjvfuaFUrWkjQwWx96sg", 
-  authDomain: "mep-609.firebaseapp.com",
-  databaseURL: "https://mep-609-default-rtdb.firebaseio.com", // ปรับเปลี่ยนตามหน้าแท็บ Realtime Database ของคุณ
-  projectId: "mep-609",
-  storageBucket: "mep-609.appspot.com",
-  messagingSenderId: "315774768401",
-  appId: "1:315774768401:web:546e7f1ac23eb3ded928b0"
-};
-
-// เริ่มต้นการใช้งาน Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const dataRef = ref(db, 'messages');
-
-// 1. ฝั่งส่ง: เรียกใช้ฟังก์ชันนี้เมื่อคุณบันทึกข้อมูลจากหน้าเว็บไซท์
-export function sendDataToFirebase(textInput) {
-  push(dataRef, {
-    text: textInput,
-    timestamp: Date.now()
-  })
-  .then(() => console.log("บันทึกข้อมูลสำเร็จ!"))
-  .catch((error) => console.error("บันทึกข้อมูลล้มเหลว:", error));
-}
-
-// 2. ฝั่งรับ: ทำงานอัตโนมัติบนมือถือของทุกคนทันทีที่มีการบันทึกข้อมูลใหม่เข้ามา
-onValue(dataRef, (snapshot) => {
-  const data = snapshot.val();
-  console.log("ได้รับข้อมูลใหม่แบบเรียลไทม์:", data);
-  // นำตัวแปร 'data' ไปเขียนโค้ดสำหรับแสดงผลบนหน้าจอมือถือของคุณต่อได้ทันที
-}, (error) => {
-  console.error("การดักฟังข้อมูลเกิดข้อผิดพลาด:", error);
-});
