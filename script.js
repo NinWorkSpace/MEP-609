@@ -448,26 +448,40 @@ loginForm?.addEventListener('submit', (e) => {
 });
 
 checkUserSession();
-// 1. อ้างอิงไปยังช่องกรอกข้อมูลของคุณ (เปลี่ยน 'myInput' ให้ตรงกับ id ใน html ของคุณ)
-const inputField = document.getElementById('myInput');
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, push, onValue } from "firebase/database";
 
-// 2. [ดึงข้อมูลกลับมาแสดงเมื่อรีเฟรชหน้าจอ]
-window.onload = function() {
-    const savedData = localStorage.getItem('backupText');
-    if (savedData) {
-        inputField.value = savedData; // ถ้าเคยบันทึกไว้ ให้นำกลับมาแสดงในช่องกรอก
-    }
+// คอนฟิกสำหรับโปรเจกต์ mep-609 ของคุณ
+const firebaseConfig = {
+  apiKey: "AIzaSyCkMwiODGtDJD1NjvfuaFUrWkjQwWx96sg", 
+  authDomain: "mep-609.firebaseapp.com",
+  databaseURL: "https://mep-609-default-rtdb.firebaseio.com", // ปรับเปลี่ยนตามหน้าแท็บ Realtime Database ของคุณ
+  projectId: "mep-609",
+  storageBucket: "mep-609.appspot.com",
+  messagingSenderId: "315774768401",
+  appId: "1:315774768401:web:546e7f1ac23eb3ded928b0"
 };
 
-// 3. ฟังก์ชันสำหรับ "กดบันทึกข้อมูล" (เอาไปผูกกับปุ่มบันทึกของคุณ เช่น <button onclick="saveData()">บันทึก</button>)
-function saveData() {
-    localStorage.setItem('backupText', inputField.value); // เซฟข้อมูลลงเบราว์เซอร์
-    alert('บันทึกข้อมูลสำเร็จ!');
+// เริ่มต้นการใช้งาน Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dataRef = ref(db, 'messages');
+
+// 1. ฝั่งส่ง: เรียกใช้ฟังก์ชันนี้เมื่อคุณบันทึกข้อมูลจากหน้าเว็บไซท์
+export function sendDataToFirebase(textInput) {
+  push(dataRef, {
+    text: textInput,
+    timestamp: Date.now()
+  })
+  .then(() => console.log("บันทึกข้อมูลสำเร็จ!"))
+  .catch((error) => console.error("บันทึกข้อมูลล้มเหลว:", error));
 }
 
-// 4. ฟังก์ชันสำหรับล้างข้อมูล (ถ้าต้องการใช้)
-function clearData() {
-    localStorage.removeItem('backupText'); // ลบข้อมูลที่บันทึกไว้ในเบราว์เซอร์
-    inputField.value = ''; // ล้างช่องกรอกข้อมูลให้ว่างเปล่า
-    alert('ล้างข้อมูลเรียบร้อยแล้ว!');
-}
+// 2. ฝั่งรับ: ทำงานอัตโนมัติบนมือถือของทุกคนทันทีที่มีการบันทึกข้อมูลใหม่เข้ามา
+onValue(dataRef, (snapshot) => {
+  const data = snapshot.val();
+  console.log("ได้รับข้อมูลใหม่แบบเรียลไทม์:", data);
+  // นำตัวแปร 'data' ไปเขียนโค้ดสำหรับแสดงผลบนหน้าจอมือถือของคุณต่อได้ทันที
+}, (error) => {
+  console.error("การดักฟังข้อมูลเกิดข้อผิดพลาด:", error);
+});
